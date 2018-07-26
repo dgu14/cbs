@@ -39,7 +39,7 @@ int main()
 
     double left = 0, right = 1e9, ret = -1;
 
-    for(int i=0;i<500;i++)
+    for(int i=0;i<1000;i++)
     {
         double mid = (left+right)/2;
 
@@ -54,7 +54,8 @@ int main()
         }
     }
 
-
+    cout << fixed;
+    cout.precision(7); // 병신 이거 안해줘서 틀리네 ㅎ
     cout << ret << endl;
 
 
