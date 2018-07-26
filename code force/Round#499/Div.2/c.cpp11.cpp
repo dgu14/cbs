@@ -52,13 +52,6 @@ int main()
         {
             left = mid;
         }
-
-        if(left >= right) break;
-        if(mid > 1e9)
-        {
-            ret = -1;
-            break;
-        }
     }
 
 
