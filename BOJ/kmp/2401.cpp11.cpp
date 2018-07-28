@@ -7,8 +7,8 @@ using ii = pair<int, int>;
 int n;
 string L;
 V<string> l;
-V<short> w[100005];
-int dp[100005];
+bool w[100001][501];
+int dp[100001];
 
 
 void kmp(int itr)
@@ -28,7 +28,7 @@ void kmp(int itr)
 
     matched = 0;
 
-    for(int i=0;i<L.size();i++)
+    for(int i=0;i<(int)L.size();i++)
     {
         while(matched != 0 && L[i] != l[itr][matched]) matched = p[matched-1];
 
@@ -38,7 +38,7 @@ void kmp(int itr)
 
             if(matched == l[itr].size())
             {
-                w[i].push_back((short)itr);
+                w[i][itr] = true;
                 matched = p[matched-1];
             }
         }
@@ -49,18 +49,17 @@ int main()
 {
     std::ios::sync_with_stdio(false);
     cin.tie(nullptr);
+
     cin >> L >> n;
-    l = V<string> (n);
+    l = V<string>(n);
     for(int i=0;i<n;i++) cin >> l[i];
     for(int i=0;i<n;i++) kmp(i);
-
     for(int i=0;i<(int)L.size();i++)
     {
         dp[i] = dp[i-1];
-        for(int j=0;j<(int)w[i].size();j++)
+        for(int j=0;j<n;j++)
         {
-            int k = l[w[i][j]].size();
-            dp[i] = max(dp[i], dp[i-k]+k);
+            if(w[i][j]) dp[i] = max(dp[i], dp[i-(int)l[j].size()]+(int)l[j].size());
         }
     }
 
