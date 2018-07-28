@@ -57,6 +57,8 @@ int lowerOneNotOverlaped(int i)
 
 int main()
 {
+    std::ios::sync_with_stdio(false);
+    cin.tie(nullptr);
     cin >> L >> n;
     l = V<string> (n);
     for(int i=0;i<n;i++) cin >> l[i];
