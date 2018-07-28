@@ -36,7 +36,7 @@ void kmp(int itr)
         {
             matched ++;
 
-            if(matched == l[itr].size())
+            if(matched == (int)l[itr].size())
             {
                 w[i][itr] = true;
                 matched = p[matched-1];
