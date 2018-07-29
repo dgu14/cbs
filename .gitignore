@@ -25,3 +25,5 @@ BOJ/kmp/2401.cpp11.exe
 BOJ/kmp/2401.cpp11.o
 BOJ/kmp/2902.cpp11.exe
 BOJ/kmp/2902.cpp11.o
+*.exe
+*.o
