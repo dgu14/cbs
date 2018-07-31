@@ -1,110 +1,73 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-using ll = long long;
-using ii=pair<ll,ll>;
 template <class T> using V = vector<T>;
 
-ll n,m,q;
-V<ii> rc;
-V<int> xSort,ySort;
+int n,m,q,a,b;
+
+class DisJointSet
+{
+public:
+    V<int> rank;
+    V<int> parent;
+
+    DisJointSet(int n)
+    {
+        rank = V<int> (n, 0);
+        parent = V<int> (n);
+
+        for(int i=0;i<n;i++)
+        {
+            parent[i] = i;
+        }
+    }
+
+    int find(int a)
+    {
+        if(parent[a] == a) return a;
+        return parent[a] = find(parent[a]);
+    }
+
+    void merge(int a, int b)
+    {
+        int pa = find(a);
+        int pb = find(b);
+
+        if(rank[pa] == rank[pb])
+        {
+            parent[pa]=pb;
+            rank[pb]++;
+        }
+        else if(rank[pa] > rank[pb])
+        {
+            parent[pb]=pa;
+        }
+        else
+        {
+            parent[pa]=pb;
+        }
+    }
+};
 
 int main()
 {
     cin>>n>>m>>q;
-    rc=V<ii>(q);
+    DisJointSet djs(n+m);
     for(int i=0;i<q;i++)
     {
-        cin >> rc[i].first >> rc[i].second;
-        xSort.push_back(rc[i].first);
-        ySort.push_back(rc[i].second);
+        cin>>a>>b;
+        a--; b--;
+
+        djs.merge(a,b+n);
     }
 
-
-
-    sort(ySort.begin(), ySort.end());
-    sort(xSort.begin(), xSort.end());
-
-
-
-    if(q==0)
+    set<int> s;
+    for(int i=0;i<n+m;i++)
     {
-        cout << n+m-1 << endl;
-        return 0;
+        s.insert(djs.find(i));
     }
 
-
-    ll x1,x2,y1,y2;
-    x1=x2=rc[0].first;
-    y1=y2=rc[0].second;
-
-    for(int i=1;i<q;i++)
-    {
-        x1 = min(x1, rc[i].first);
-        x2 = max(x2, rc[i].first);
-
-        y1 = min(y1, rc[i].second);
-        y2 = max(y2, rc[i].second);
-    }
-
-    int maxT = 0;
-    int maxPos = -1;
-    int isX = true;
-
-    for(int i=x1;i<=x2;i++)
-    {
-        int k =upper_bound(xSort.begin(), xSort.end(), i) - lower_bound(xSort.begin(), xSort.end(), i);
-        if(k > maxT)
-        {
-           maxT = k;
-            maxPos = i;
-        }
-    }
-
-    for(int i=y1;i<=y2;i++)
-    {
-        int k =upper_bound(ySort.begin(), ySort.end(), i) - lower_bound(ySort.begin(), ySort.end(), i);
-        if(k > maxT)
-        {
-            maxT = k;
-            maxPos = i;
-            isX=false;
-        }
-    }
-
-
-    int tot = 0;
-
-    if(isX)
-    {
-        for(int i=x1;i<=x2;i++)
-        {
-            if(i == maxPos) continue;
-            if(binary_search(xSort.begin(), xSort.end(), i));
-            else tot++;
-        }
-
-        tot += y2-y1+1-maxT;
-
-    }
-    else
-    {
-        for(int i=y1;i<=y2;i++)
-        {
-            if(i == maxPos) continue;
-            if(binary_search(ySort.begin(), ySort.end(), i));
-            else tot++;
-        }
-
-        tot += x2-x1+1-maxT;
-    }
-
-    ll rx = 0, ry = 0;
-
-    rx = n-(x2-x1)-1;
-    ry = m-(y2-y1)-1;
-
-    cout << tot + rx + ry << endl;
+    cout << s.size()-1 << endl;
 
     return 0;
 }
