@@ -37,15 +37,11 @@ int solution(int n) {
         {
             break;
         }
-
-
         base = 3 * base;
     }
 
     i--;
-
     answer = solve(n, i, 0, 0);
-
 
     return answer;
 }
