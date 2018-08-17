@@ -29,7 +29,7 @@ int main()
         if(b.substr(0, i) == a.substr(0, i))
         {
             bool test=true;
-            for(j=0;;j++)
+            for(j=0;test;j++)
             {
                 if(N-1-j == i) break;
                 if(a[N-1-j] != b[M-1-j]) test=false;
