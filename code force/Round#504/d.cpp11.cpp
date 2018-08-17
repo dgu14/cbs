@@ -22,15 +22,17 @@ int main()
         {
             arr[i]=q;
             isQExist=true;
+
+            break;
         }
     }
-
 
     if(!isQExist)
     {
         cout << "NO" << endl;
         return 0;
     }
+
 
     int j;
     for(int i=1;i<n;i++)

@@ -2,7 +2,7 @@
 using namespace std;
 
 using ll=long long;
-
+using ii=pair<int,int>;
 int n,k;
 string sq;
 
@@ -13,45 +13,48 @@ int main()
     r=n/2-r;
 
 
-    stack<string> stk;
+    string nsq;
+    vector<int> excl;
     for(int i=0;i<n;i++)
     {
-        if(sq[i]=='(')
+        if(sq[i]==')')
         {
-            stk.push("(");
+            if(!r) continue;
+            nsq += sq[i]; r--;
         }
-        else if(sq[i]==')')
+        else  nsq += sq[i];
+    }
+
+    int m=nsq.size();
+
+    stack<int> stk;
+
+    for(int i=0;i<m;i++)
+    {
+        if(nsq[i]=='(') stk.push(i);
+        else
         {
-            string f=")";
-            while(stk.top()!="(")
-            {
-                f=stk.top() + f;
-                stk.pop();
-            }
             stk.pop();
-            f="("+f;
-
-            stk.push(f);
-
-            r--;
-            if(r==0)
-            {
-                break;
-            }
         }
     }
 
-    string ret;
     while(stk.size())
     {
-        if(stk.top().size()%2==0)
-        {
-            ret=stk.top()+ret;
-        }
+        excl.push_back(stk.top());
         stk.pop();
     }
 
-    cout << ret << endl;
+    reverse(excl.begin(), excl.end());
+
+    for(int i=0, j=0;i<m;i++)
+    {
+        if(j<excl.size() && i==excl[j])
+        {
+            j++;
+        }
+        else cout << nsq[i];
+    }
+    cout << endl;
 
     return 0;
 }
