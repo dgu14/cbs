@@ -20,14 +20,33 @@ template <class T> using V=vector<T>;
     AOJ BOJ CODEFORCE CODEGROUND
 */
 
+int n,m;
+string table[200];
+
 int main()
 {
     #ifdef test
         ofstream fout("a.out");
         ifstream fin("a.in");
     #else
+        cin>>n>>m;
+        forn(i,n) cin>>table[i];
+
+        int sx=-1,sy,ex,ey;
+        forn(i, n)
+        {
+            forn(j, m)
+            {
+                if(table[i][j]=='B')
+                {
+                    if(sx==-1) { sx=i; sy=j; }
+                    ex=i; ey=j;
+                }
+            }
+        }
 
 
+        cout << (sx+ex)/2 + 1 << " " << (sy+ey)/2 + 1<< endl;
     #endif
 
 	return 0;

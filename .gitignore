@@ -33,3 +33,5 @@ BOJ/kmp/2902.cpp11.o
 .vs/git/v15/ipch/AutoPCH/9661442a5e94ca7/E.CPP11.ipch
 .vs/git/v15/Browse.VC.db
 .vs/git/v15/.suo
+*.in
+*.out

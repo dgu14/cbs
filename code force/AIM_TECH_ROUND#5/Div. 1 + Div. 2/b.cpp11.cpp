@@ -26,7 +26,18 @@ int main()
         ofstream fout("a.out");
         ifstream fin("a.in");
     #else
+        int n,m;
+        cin>>n>>m;
 
+        string a,b;
+        forn1(i, 400)
+        {
+            a+='5';
+            if(i==400) b+='5';
+            else b+='4';
+        }
+
+        cout << a << '\n' << b << endl;
 
     #endif
 
