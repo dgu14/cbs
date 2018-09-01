@@ -14,6 +14,8 @@ template <class T> using V=vector<T>;
 #define gcd                         __gcd
 #define forn(i,n) 					for(int i=0;i<(int)n;i++)
 #define forn1(i,n)					for(int i=1;i<=(int)n;i++)
+#define rforn(i,n)                  for(int i=(int)n-1;i>=0;i--)
+#define rforn1(i,n)                 for(int i=(int)n;i>=1;i--)
 
 /**
     cbs0615/ddolgu14
