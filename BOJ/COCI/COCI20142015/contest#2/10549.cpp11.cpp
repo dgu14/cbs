@@ -22,9 +22,32 @@ template <class T> using V=vector<T>;
     AOJ BOJ CODEFORCE CODEGROUND
 */
 
+// a+bt == c+dt
+// a-c=(d-b)t
+// if(d-b==0 && a-c=0) g+=1;
+// else if(a-c/d-b >=0) m[a-c/d-b]++;
+
+/// a+bt == c+dt
+/// a+bq == e+fq
+
+/// c+dt-bt == e+fq-bq
+/// c+(d-b)t == e+(f-b)q
+int N, g;
+int a[1000][1000], b[1000][1000];
+map<double, int> m;
+
 int main()
 {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr); cout.tie(nullptr);
+    cin>>N;
+
+    forn(i,N) forn(j,N) cin>>a[i][j];
+    forn(i,N) forn(j,N) cin>>b[i][j];
+
+    /// N=700 -> N^3
 
 
 	return 0;
 }
+
