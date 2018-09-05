@@ -21,33 +21,151 @@ template <class T> using V=vector<T>;
     cbs0615/ddolgu14
     AOJ BOJ CODEFORCE CODEGROUND
 */
+int const MAX_ND=500000;
 
-// a+bt == c+dt
-// a-c=(d-b)t
-// if(d-b==0 && a-c=0) g+=1;
-// else if(a-c/d-b >=0) m[a-c/d-b]++;
 
-/// a+bt == c+dt
-/// a+bq == e+fq
-
-/// c+dt-bt == e+fq-bq
-/// c+(d-b)t == e+(f-b)q
 int N, g;
-int a[1000][1000], b[1000][1000];
-map<double, int> m;
-
-int main()
+int a[800][800], b[800][800], dx[]={0,0,-1,1}, dy[]={-1,1,0,0};
+int ps[MAX_ND], ori[MAX_ND];
+class triple
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr); cout.tie(nullptr);
-    cin>>N;
+public: ll x,y,z;
+};
 
-    forn(i,N) forn(j,N) cin>>a[i][j];
-    forn(i,N) forn(j,N) cin>>b[i][j];
+int parent[MAX_ND], sz[MAX_ND], m_u=1, ret;
+set<int> changed;
 
-    /// N=700 -> N^3
+void init()
+{
+    m_u=1;
 
+    for(auto it=changed.begin();it!=changed.end();it++)
+    {
+        parent[*it]=*it;
+        sz[*it]=ps[ori[*it]];
+    }
 
-	return 0;
+    changed.clear();
 }
 
+int find(int a)
+{
+    if(parent[a]==a) return a;
+    return parent[a]=find(parent[a]);
+}
+
+void merge(int a, int b)
+{
+    int pa=find(a), pb=find(b);
+    if(pa!=pb)
+    {
+        parent[pa]=pb;
+        sz[pb]=sz[pa]+sz[pb];
+        m_u=max(m_u, sz[pb]);
+
+        changed.insert(pa);
+        changed.insert(pb);
+    }
+}
+
+
+
+
+void dfs(int sx, int sy, V<V<bool>>& vst)
+{
+    vst[sx][sy]=true;
+
+    forn(i, 4)
+    {
+        int nx=sx+dx[i], ny=sy+dy[i];
+
+        if(nx>=0&&nx<N && ny>=0 && ny<N && !vst[nx][ny] && a[nx][ny]==a[sx][sy] && b[nx][ny]==b[sx][sy])
+        {
+            ori[nx*N+ny]=ori[sx*N+sy];
+            ps[ori[nx*N+ny]]++;
+            dfs(nx, ny, vst);
+        }
+    }
+}
+
+class quad
+{
+public: ll x,y,u,v;
+};
+int main()
+{
+    //ios::sync_with_stdio(false);
+    //cin.tie(nullptr); cout.tie(nullptr);
+    scanf("%d", &N);
+
+    forn(i,N) forn(j,N) scanf("%d", &a[i][j]);
+    forn(i,N) forn(j,N) scanf("%d", &b[i][j]);
+
+    V<V<bool>> vst(N, V<bool> (N, false));
+
+    forn(i,N)
+    {
+        forn(j, N)
+        {
+            if(!vst[i][j]) ps[i*N+j]=1, ori[i*N+j]=i*N+j, dfs(i,j,vst), ret=max(ret, ps[i*N+j]);
+        }
+    }
+
+    V<quad> e;
+    forn(i,N)
+    {
+        forn(j,N)
+        {
+            if(i!=N-1)
+            {
+                if(b[i][j]!=b[i+1][j])
+                {
+                    ll u=a[i][j]-a[i+1][j], v=b[i+1][j]-b[i][j];
+
+                    if(v==0 || u*v<0) continue;
+                    if(u<0) u=-u, v=-v;
+                    else if(u==0) v=abs(v);
+                    e.push_back({ori[i*N+j], ori[(i+1)*N+j], u, v});
+                }
+            }
+
+            if(j!=N-1)
+            {
+                if(b[i][j]!=b[i][j+1])
+                {
+                    ll u=a[i][j]-a[i][j+1], v=b[i][j+1]-b[i][j];
+
+                    if(v==0 || u*v<0) continue;
+                    if(u<0) u=-u, v=-v;
+                    else if(u==0) v=abs(v);
+                    e.push_back({ori[i*N+j], ori[i*N+j+1], u, v});
+                }
+            }
+        }
+    }
+
+    sort(e.begin(), e.end(), [](quad& a, quad& b)
+         {
+             return a.u * b.v < a.v* b.u;
+         });
+
+
+    forn(i, N)
+    {
+        forn(j,N)
+        {
+            changed.insert(ori[i*N+j]);
+        }
+    }
+
+    forn(i, e.size())
+    {
+        if(i==0 || e[i].u*e[i-1].v != e[i].v*e[i-1].u) init();
+        merge(e[i].x, e[i].y);
+
+        ret=max(ret, m_u);
+    }
+
+    printf("%d\n", ret);
+	return 0;
+}
