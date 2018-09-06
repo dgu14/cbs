@@ -123,8 +123,7 @@ int main()
                     ll u=a[i][j]-a[i+1][j], v=b[i+1][j]-b[i][j];
 
                     if(v==0 || u*v<0) continue;
-                    if(u<0) u=-u, v=-v;
-                    else if(u==0) v=abs(v);
+                    u=abs(u), v=abs(v);
                     e.push_back({ori[i*N+j], ori[(i+1)*N+j], u, v});
                 }
             }
@@ -136,8 +135,7 @@ int main()
                     ll u=a[i][j]-a[i][j+1], v=b[i][j+1]-b[i][j];
 
                     if(v==0 || u*v<0) continue;
-                    if(u<0) u=-u, v=-v;
-                    else if(u==0) v=abs(v);
+                    u=abs(u), v=abs(v);
                     e.push_back({ori[i*N+j], ori[i*N+j+1], u, v});
                 }
             }
