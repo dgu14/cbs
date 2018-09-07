@@ -22,14 +22,41 @@ template <class T> using V=vector<T>;
     AOJ BOJ CODEFORCE CODEGROUND
 */
 
-ll n, a[500005], dp[500005];
+ll n, a[500005];
 
 int main()
 {
+    ll absSum=0;
     cin>>n;
-    forn(i,n) cin>>a[i];
+    forn(i,n) cin>>a[i], absSum+=abs(a[i]);
 
 
+    bool allSame=true;
+    forn(i,n-1) if(a[i]*a[i+1]<0) allSame=false;
+
+
+    if(allSame && n==1)
+    {
+        cout << a[0] << endl;
+        return 0;
+    }
+
+    if(allSame && a[0]>0)
+    {
+        ll mv=(ll)1e9+5;
+        forn(i,n) mv=min(mv, a[i]);
+
+        absSum-=2*mv;
+    }
+    else if(allSame && a[0]<0)
+    {
+        ll mv=(ll)1e9+5; mv=-mv;
+        forn(i,n) mv=max(mv, a[i]);
+
+        absSum+=2*mv;
+    }
+
+    cout << absSum << endl;
 
 
 	return 0;
