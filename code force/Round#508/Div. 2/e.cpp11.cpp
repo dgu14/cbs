@@ -22,32 +22,9 @@ template <class T> using V=vector<T>;
     AOJ BOJ CODEFORCE CODEGROUND
 */
 
-class triple
-{
-public:
-    int c1,c2,v;
-};
-
-int n, a,b,c;
-V<triple> cvc;
-
 int main()
 {
-    ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-    cin>>n;
 
-    forn(i,n)
-    {
-        cin>>a>>b>>c;
-        a--;c--;
-
-        cvc.push_back({a,c,b});
-    }
-
-    /**
-
-    */
 
 	return 0;
 }
-
