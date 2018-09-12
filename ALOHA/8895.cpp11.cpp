@@ -31,51 +31,47 @@ int main()
     cin>>tt;
 
 
-    ll dp[21][21][21]={0,}, C[21][21]={0,}, F[21]={0,};
+    ll dp[30][30][30]={0,}, C[21][21]={0,};
+    dp[1][1][1]=1;
     dp[0][0][0]=1;
 
     forn(i,21) C[i][0]=C[i][i]=1;
     forn1(i,20)
     {
-        forn1(j,i)
+        forn1(j,20)
         {
             C[i][j]=C[i-1][j]+C[i-1][j-1];
         }
     }
 
-    F[0]=1;
     forn1(i,20)
     {
-        F[i]=F[i-1]*i;
-    }
-
-    forn1(i,20)
-    {
+        if(i==1) continue;
         forn1(j,i)
         {
             forn1(k,i)
             {
-                forn1(q,j-1)
+                forn(q,i)
                 {
-                    dp[i][j][k] += dp[i][q][k-1] * C[i-1][q] * F[i-1-q];
+                    forn(u,21)
+                    {
+                        forn(v,21)
+                        {
+                            dp[i][j][k]+=dp[q][j-1][u]*dp[i-1-q][v][k-1]*C[i-1][q];
+                        }
+                    }
                 }
             }
         }
     }
-
 
     while(tt--)
     {
         int n,l,r;
         cin>>n>>l>>r;
 
-        ll ret=0;
-        forn1(i,n)
-        {
-            ret+=dp[n][i][l]*dp[n][n+1-i][r]*C[n-1][n-i];
-        }
+        cout << dp[n][l][r] << endl;
 
-        cout << ret << endl;
     }
 
 	return 0;

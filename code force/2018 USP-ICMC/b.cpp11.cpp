@@ -24,7 +24,7 @@ template <class T> using V=vector<T>;
 
 int n,d;
 string str;
-const int MAX = 1000044;
+const int MAX = 1000004;
 
 string S;
 int N, sa[MAX], pos[MAX];
@@ -96,8 +96,14 @@ void constructSA(){
 
 int main()
 {
-    ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-    cin>>n; cin>>str;
+    //ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
+    cin >> n;
+    getchar();
+    while(1) {
+        char c = getchar();
+        if(c == '\n') break;
+        str += c;
+    }
 
     bool test=false;
     if(n==1) test=true;
@@ -115,13 +121,12 @@ int main()
             break;
         }
 
-        if(p==0) test=true;
-        else if(S.substr(p, n) == str) test=true;
+        if(S.substr(p, n) == str) test=true;
 
     }
 
-    if(test) cout << "Yes" << endl;
-    else cout << "No" << endl;
+    if(test) printf("Yes\n");
+    else printf("No\n");
 
 	return 0;
 }
