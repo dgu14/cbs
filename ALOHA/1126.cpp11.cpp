@@ -22,46 +22,42 @@ template <class T> using V=vector<T>;
     AOJ BOJ CODEFORCE CODEGROUND
 */
 
-int n,m,a[1050][1050], dp[1050][1050];
+int n, dp[51][500001], a[51];
+int const zero=250000;
+
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-    cin>>n>>m;
-    forn1(i,n) forn1(j,m) cin>>a[i][j];
+    cin>>n; forn1(i,n) cin>>a[i]; sort(a+1, a+n+1);
 
-    rforn1(i,n)
+    forn(i,51) forn(j,500001) dp[i][j]=-1;
+
+
+    dp[0][zero]=0;
+    forn1(i,n)
     {
-        if(i==n)
+        forn(j,500001)
         {
-            rforn1(j,m)
-            {
-                dp[i][j]=dp[i][j+1]+a[i][j];
-            }
-            continue;
-        }
-
-        int sub1[1050]={0,}, sub2[1050]={0,};
-
-        forn1(j,m)
-        {
-            if(j==1) sub1[j]=dp[i+1][j]+a[i][j];
-            else sub1[j]=max(sub1[j-1], dp[i+1][j])+a[i][j];
-        }
-
-        rforn1(j,m)
-        {
-            if(j==m) sub2[j]=dp[i+1][j]+a[i][j];
-            else sub2[j]=max(sub2[j+1], dp[i+1][j])+a[i][j];
-        }
-
-        forn1(j,m)
-        {
-            dp[i][j]=max(sub1[j], sub2[j]);
+            if(j-a[i]>=0 && dp[i-1][j-a[i]]!=-1) dp[i][j]=max(dp[i][j], dp[i-1][j-a[i]]+a[i]);
+            if(j+a[i]<=500000 && dp[i-1][j+a[i]]!=-1) dp[i][j]=max(dp[i][j], dp[i-1][j+a[i]]);
+            dp[i][j]=max(dp[i][j], dp[i-1][j]);
         }
     }
 
-    cout << dp[1][1] << endl;
+
+    if(dp[n][zero]==-1 || dp[n][zero]==0) cout << -1 << endl;
+    else cout << dp[n][zero] << endl;
 
 	return 0;
 }
 
+
+/*
+6
+400000 12500 12500 12500 12500 5
+-1
+
+아 존나 멍청하다 진짜
+처음에 거를 왜 무조건 택한다고 가정하냐 멍청아.
+진짜
+*/
