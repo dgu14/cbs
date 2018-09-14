@@ -22,46 +22,40 @@ template <class T> using V=vector<T>;
     AOJ BOJ CODEFORCE CODEGROUND
 */
 
-int n,k, sz[1050];
-V<V<ii>> adj[1050];
-int dp[1050][1050];
+int n, a[10005], vst[10005], dp[10005][2][2];
+V<int> adj[10005];
 
-int dfs(int src, V<bool>& vst)
+void dfs(int src)
 {
-    int ret=1;
-    vst[src]=true;
+    vst[src]=1;
+    int s=0, d=0, m=0, m1=0, m2=0;
 
-    for(ii there:adj[src])
+    for(int obj:adj[src])
     {
-        if(!vst[there.first])
+        if(!vst[obj])
         {
-            ret+=dfs(there.first, vst);
+            dfs(obj);
+
+            s+=dp[obj][0][1];
+            d+=max(dp[obj][0][1], dp[obj][0][0]);
+            m+=max(dp[obj][1][0], dp[obj][0][1]);
+            if(m>m1) { m2=m1; m1=m; }
+            else if(m>m2) m2=m;
         }
     }
 
-    forn(i, ret+1)
-    {
-        forn ggggggggggggg
-    }
-
-    return ret;
+    dp[src][0][0]=s;
+    dp[src][0][1]=(m1==s?m2:m1);
+    dp[src][1][0]=d+a[src];
 }
 
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-    cin>>n>>k;
+    cin>>n; forn1(i,n) cin>>a[i]; int p,q;
+    forn(i,n-1){ cin>>p>>q; adj[p].push_back(q); adj[q].push_back(p); }
 
-    int a,b,c;
-    forn(i,n)
-    {
-        cin>>a>>b>>c;
-        adj[a].push_back({b,c});
-        adj[b].push_back({a,c});
-    }
-
-    V<bool> vst(n+1, false);
-
+    dfs(1);
+    cout << max(dp[1][1][0], dp[1][0][1]) << endl;
 	return 0;
 }
-

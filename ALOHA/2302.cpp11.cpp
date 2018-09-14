@@ -22,46 +22,33 @@ template <class T> using V=vector<T>;
     AOJ BOJ CODEFORCE CODEGROUND
 */
 
-int n,k, sz[1050];
-V<V<ii>> adj[1050];
-int dp[1050][1050];
-
-int dfs(int src, V<bool>& vst)
-{
-    int ret=1;
-    vst[src]=true;
-
-    for(ii there:adj[src])
-    {
-        if(!vst[there.first])
-        {
-            ret+=dfs(there.first, vst);
-        }
-    }
-
-    forn(i, ret+1)
-    {
-        forn ggggggggggggg
-    }
-
-    return ret;
-}
+int n,m,a[50];
+int dp2[50];
 
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-    cin>>n>>k;
+    cin>>n>>m;
+    forn1(i,m) cin>>a[i];
 
-    int a,b,c;
-    forn(i,n)
+    dp2[0]=1; dp2[1]=1; dp2[2]=2;
+    forn1(i,n)
     {
-        cin>>a>>b>>c;
-        adj[a].push_back({b,c});
-        adj[b].push_back({a,c});
+        if(i==1 || i==2) continue;
+        dp2[i]=dp2[i-1]+dp2[i-2];
     }
 
-    V<bool> vst(n+1, false);
+    int ret=1;
+    int c=0, j=1;
+
+    forn1(i,n)
+    {
+        if(i==a[j]) { ret*=dp2[c]; c=0; j++;}
+        else c++;
+    }
+
+    ret*=dp2[c];
+    cout << ret << endl;
 
 	return 0;
 }
-

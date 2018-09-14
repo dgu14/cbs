@@ -22,45 +22,39 @@ template <class T> using V=vector<T>;
     AOJ BOJ CODEFORCE CODEGROUND
 */
 
-int n,k, sz[1050];
-V<V<ii>> adj[1050];
-int dp[1050][1050];
-
-int dfs(int src, V<bool>& vst)
+int dfs(int src, V<V<int>>& adj)
 {
-    int ret=1;
-    vst[src]=true;
-
-    for(ii there:adj[src])
+    int m1=0, m2=0, m;
+    for(int obj:adj[src])
     {
-        if(!vst[there.first])
-        {
-            ret+=dfs(there.first, vst);
-        }
+        m=dfs(obj, adj);
+        if(m>m1) m2=m1, m1=m;
+        else if(m>m2) m2=m;
     }
 
-    forn(i, ret+1)
+    if(m1!=0)
     {
-        forn ggggggggggggg
+        if(m1==m2) return m1+1;
+        else return m1;
     }
 
-    return ret;
+    return 1;
 }
 
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-    cin>>n>>k;
-
-    int a,b,c;
-    forn(i,n)
+    int tt; cin>>tt;
+    while(tt--)
     {
-        cin>>a>>b>>c;
-        adj[a].push_back({b,c});
-        adj[b].push_back({a,c});
-    }
+        V<V<int>> adj(1005);
+        int tn, m,p,a,b;
+        cin>>tn>>m>>p;
 
-    V<bool> vst(n+1, false);
+        forn(i,p) { cin>>a>>b; adj[b].push_back(a); }
+
+        cout << tn << " " << dfs(m, adj) << '\n';
+    }
 
 	return 0;
 }

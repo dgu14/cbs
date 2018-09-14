@@ -22,45 +22,46 @@ template <class T> using V=vector<T>;
     AOJ BOJ CODEFORCE CODEGROUND
 */
 
-int n,k, sz[1050];
-V<V<ii>> adj[1050];
-int dp[1050][1050];
+ll N,X,Y, x[100050], y[100050], dp[100050][5];
+ll dx[]={0,0,0,1,-1}, dy[]={0,1,-1,0,0};
 
-int dfs(int src, V<bool>& vst)
+ll dist(ll s, ll ds, ll t, ll dt)
 {
-    int ret=1;
-    vst[src]=true;
-
-    for(ii there:adj[src])
+    if(t==0)
     {
-        if(!vst[there.first])
-        {
-            ret+=dfs(there.first, vst);
-        }
+        return abs(x[s]+dx[ds]-X)+abs(y[s]+dy[ds]-Y);
     }
 
-    forn(i, ret+1)
-    {
-        forn ggggggggggggg
-    }
-
-    return ret;
+    return abs(x[s]+dx[ds]-x[t]-dx[dt])+abs(y[s]+dy[ds]-y[t]-dy[dt]);
 }
 
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-    cin>>n>>k;
+    cin>>N>>X>>Y; forn1(i,N) cin>>x[i]>>y[i];
 
-    int a,b,c;
-    forn(i,n)
+    forn(i,N+1) forn(j,5) dp[i][j]=LONG_INF;
+
+
+    dp[0][0]=0;
+    forn1(i,N)
     {
-        cin>>a>>b>>c;
-        adj[a].push_back({b,c});
-        adj[b].push_back({a,c});
+        forn(j,5)
+        {
+            forn(k,5)
+            {
+                dp[i][j]=min(dp[i][j], dp[i-1][k]+dist(i,j, i-1,k));
+            }
+        }
     }
 
-    V<bool> vst(n+1, false);
+    ll min_t=LONG_INF;
+    forn(i,5)
+    {
+        min_t=min(min_t, dp[N][i]);
+    }
+
+    cout << min_t << endl;
 
 	return 0;
 }

@@ -22,46 +22,35 @@ template <class T> using V=vector<T>;
     AOJ BOJ CODEFORCE CODEGROUND
 */
 
-int n,k, sz[1050];
-V<V<ii>> adj[1050];
-int dp[1050][1050];
-
-int dfs(int src, V<bool>& vst)
-{
-    int ret=1;
-    vst[src]=true;
-
-    for(ii there:adj[src])
-    {
-        if(!vst[there.first])
-        {
-            ret+=dfs(there.first, vst);
-        }
-    }
-
-    forn(i, ret+1)
-    {
-        forn ggggggggggggg
-    }
-
-    return ret;
-}
+int n,k, a[55000], dp[4][55000];
 
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-    cin>>n>>k;
+    cin>>n; forn1(i,n) cin>>a[i]; cin>>k;
 
-    int a,b,c;
-    forn(i,n)
+    forn1(i,n)
     {
-        cin>>a>>b>>c;
-        adj[a].push_back({b,c});
-        adj[b].push_back({a,c});
+        dp[0][i]=dp[0][i-1]+a[i];
     }
 
-    V<bool> vst(n+1, false);
+    forn1(i, 3)
+    {
+        if(i==1)
+        {
+            forn1(j,n) if(j-k>=0) dp[1][j]=max(dp[1][j-1], dp[0][j]-dp[0][j-k]);
+            continue;
+        }
+
+        forn1(j, n)
+        {
+            if(j-k>=0) dp[i][j]=max(dp[i][j-1], dp[i-1][j-k] + dp[0][j]-dp[0][j-k]);
+        }
+    }
+
+    cout << dp[3][n] <<endl;
 
 	return 0;
 }
+
 

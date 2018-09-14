@@ -22,45 +22,37 @@ template <class T> using V=vector<T>;
     AOJ BOJ CODEFORCE CODEGROUND
 */
 
-int n,k, sz[1050];
-V<V<ii>> adj[1050];
-int dp[1050][1050];
+int n, c[1000005];
+V<V<int>> adj;
+
 
 int dfs(int src, V<bool>& vst)
 {
-    int ret=1;
     vst[src]=true;
+    int cc=0;
 
-    for(ii there:adj[src])
+    for(int there:adj[src])
     {
-        if(!vst[there.first])
+        if(!vst[there])
         {
-            ret+=dfs(there.first, vst);
+            if(!dfs(there, vst)) cc=1;
         }
     }
 
-    forn(i, ret+1)
-    {
-        forn ggggggggggggg
-    }
-
-    return ret;
+    return c[src]=cc;
 }
 
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-    cin>>n>>k;
-
-    int a,b,c;
-    forn(i,n)
-    {
-        cin>>a>>b>>c;
-        adj[a].push_back({b,c});
-        adj[b].push_back({a,c});
-    }
+    cin>>n; int a,b; adj.resize(n+1);
+    forn(i,n-1) { cin>>a>>b; adj[a].push_back(b); adj[b].push_back(a); }
 
     V<bool> vst(n+1, false);
+    dfs(1, vst); int ret=0;
+    forn1(i,n) ret+=c[i];
+
+    cout << ret << endl;
 
 	return 0;
 }
