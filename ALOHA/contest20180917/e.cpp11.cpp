@@ -28,40 +28,36 @@ int dx[]={-1, -1, -1, 0, 0, 1, 1, 1};
 int dy[]={-1, 0, 1, -1, 1, -1, 0, 1};
 
 int ck=0,px,py,totk;
-int min_a, max_a;
-void traverse(int i, int j, int mv, V<V<bool>>& vst)
+
+void traverse(int i, int j, int mv, V<V<bool>>& vst, int min_a)
 {
-
-    int tn=min(min_a, val[i][j]);
-    int tm=max(max_a, val[i][j]);
-
-    if(tm-tn>mv) return;
-
     vst[i][j]=true;
-
-    min_a=tn;
-    max_a=tm;
-
-    if(mp[i][j]=='K') ck++;
+    if(mp[i][j]=='K' || mp[i][j]=='P') ck++;
 
     for(int k=0;k<8;k++)
     {
         int cx=i+dx[k], cy=j+dy[k];
-        if(cx>=0 && cx<n && cy>=0 && cy<n && !vst[cx][cy])
+        if(cx>=0 && cx<n && cy>=0 && cy<n && !vst[cx][cy] && val[cx][cy]>=min_a && val[cx][cy]<=min_a+mv)
         {
-            traverse(cx, cy, mv, vst);
+            traverse(cx, cy, mv, vst, min_a);
         }
     }
 }
 
 bool canGoEvery(int mv)
 {
-    ck=0; min_a=(int)1e7; max_a=(int)-1e7;
-    V<V<bool>> vst(55, V<bool>(55, false));
+    forn(i,n)
+    {
+        forn(j,n)
+        {
+            ck=0;
+            V<V<bool>> vst(55, V<bool>(55, false));
+            traverse(i,j,mv,vst,val[i][j]);
+            if(ck==totk+1) return true;
+        }
+    }
 
-    traverse(px, py, mv,vst);
-    if(ck==totk) return true;
-    else return false;
+    return false;
 }
 
 int main()
@@ -85,7 +81,6 @@ int main()
     }
 
     int lo=0; int hi=1000000;
-
     int mid, ret;
 
     while(lo<=hi)
