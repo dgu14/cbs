@@ -17,6 +17,9 @@ template <class T> using V=vector<T>;
 #define rforn(i,n)                  for(int i=(int)n-1;i>=0;i--)
 #define rforn1(i,n)                 for(int i=(int)n;i>=1;i--)
 
+int n,m;
+
+
 int main()
 {
 
