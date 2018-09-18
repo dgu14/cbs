@@ -22,34 +22,57 @@ template <class T> using V=vector<T>;
     AOJ BOJ CODEFORCE CODEGROUND
 */
 
-int n, arr[500050], bucket[40000], s=25000;
+int n, bit[500005], arr[500005];
+map<int, int> mp;
+
+void update(int idx, int val)
+{
+    idx++;
+    int pos=idx;
+
+    while(pos<=500000)
+    {
+        bit[pos]+=val;
+        pos+=pos&-pos;
+    }
+}
+
+int sum(int idx)
+{
+    idx++;
+    int pos=idx, ret=0;
+
+    while(pos)
+    {
+        ret+=bit[pos];
+        pos-=pos&-pos;
+    }
+
+    return ret;
+}
+
 
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-    cin>>n; forn1(i,n) cin>>arr[i];
+    cin>>n; int a;
 
-    forn1(i,n)
+    forn1(i, n)
     {
-        // query
-
-        int tot=0;
-        forn1(j,arr[i]/40000)
-        {
-            tot+=bucket[j];
-        }
-
-        int s=tot;
-
-        forn(j, arr[i]%40000)
-        {
-            tot+=bucket[j];
-        }
-
-
-        bucket[arr[i]%40000]++;
+        cin>>a; mp[a]=i;
     }
 
+    int cnt=0;
+    for(auto it=mp.begin();it!=mp.end();it++)
+    {
+        arr[it->second]=++cnt;
+    }
+
+    forn1(i, n)
+    {
+        update(arr[i],1);
+        cout << i-sum(arr[i]-1) <<'\n';
+    }
 
 	return 0;
 }
