@@ -17,74 +17,84 @@ template <class T> using V=vector<T>;
 #define rforn(i,n)                  for(int i=(int)n-1;i>=0;i--)
 #define rforn1(i,n)                 for(int i=(int)n;i>=1;i--)
 
-int n,k, adj[1050][1050], sz[1050], dp[1050][1050][2], tdp[1050][2];
-V<int> sel[1005][1005];
-V<int> selected;
-void mrg(int u, int v)
+int n,k, adj[1050][1050], sz[1050], nc[1050];
+V<V<int>> dp[1050][2]; V<int> chd[1050];
+set<int> selected;
+
+void mrg(int u, int v, int c, int nn)
 {
-    forn(i,sz[u]+sz[v]) tdp[i][0]=tdp[i][1]=INF;
+    int su=nn, sv=sz[v];
+    dp[u][0][c].resize(su+sv); dp[u][1][c].resize(su+sv);
+    forn(i, su+sv) dp[u][0][c][i]=dp[u][1][c][i]=INF;
 
-    int pv, pj;
-    forn(i,sz[u])
+    forn(i,su)
     {
-        forn(j,sz[v])
+        forn(j,sv)
         {
-            forn(q, 2)
-            {
-                if(tdp[i+j+(q==0)][0] > dp[u][i][0]+dp[v][j][q])
-                {
-                    tdp[i+j+(q==0)][0]=dp[u][i][0]+dp[v][j][q]);
-                    pv=v; pj=j;
-                }
-            }
+            dp[u][0][c][i+j+1]=min(dp[u][0][c][i+j+1], dp[u][0][c-1][i]+dp[v][0][nc[v]][j]+adj[u][v]);
+            dp[u][0][c][i+j]=min(dp[u][0][c][i+j], dp[u][0][c-1][i]+dp[v][1][nc[v]][j]);
+
+            dp[u][1][c][i+j+1]=min(dp[u][1][c][i+j+1], dp[u][1][c-1][i]+dp[v][0][nc[v]][j]);
+            dp[u][1][c][i+j]=min(dp[u][1][c][i+j], dp[u][1][c-1][i]+dp[v][1][nc[v]][j]+adj[u][v]);
         }
     }
-
-    sel[u][i+j+(q==0)][0].push_back({v,j});
-
-    forn(i,sz[u])
-    {
-        forn(j,sz[v])
-        {
-            forn(q,2)
-            {
-                if(tdp[i+j+(q==0)][1] > dp[u][i][1]+dp[v][j][q]+(q==1?adj[u][v]:0))
-                {
-                    tdp[i+j+(q==0)][1] = dp[u][i][1]+dp[v][j][q]+(q==1?adj[u][v]:0);
-                    pv=v; pj=j;
-                }
-            }
-        }
-    }
-
-    sel[u][i+j+(q==0)][1].push_back({v,j});
-
-    forn(i,sz[u]+sz[v]) dp[u][i][0]=tdp[i][0], dp[u][i][1]=tdp[i][1];
 }
 
 void dfs(int src, V<bool>& vst)
 {
-    vst[src]=true; sz[src]++; dp[src][0][0]=0; dp[src][0][1]=0;
+    vst[src]=true; int c=0; int nn=0;
+    dp[src][0].resize(nc[src]+1); dp[src][1].resize(nc[src]+1);
+
+    dp[src][0][c].resize(1); dp[src][1][c].resize(1);
+    dp[src][0][c][0]=0; dp[src][1][c][0]=0;
+
+    c++; nn++;
 
     forn1(dst, n)
     {
         if(adj[src][dst]>0 && !vst[dst])
         {
-            dfs(dst, vst); mrg(src, dst); sz[src]+=sz[dst];
+            dfs(dst, vst);
+            mrg(src, dst, c,nn);
+            c++; nn+=sz[dst];
         }
     }
 }
 
-void print(int src, int max_val, V<bool>& vst)
+void dfs2(int src, V<bool>& vst)
 {
-    // 시작은 루트값이 선택됬나 안됬냐를 알수있다.
-    //
+    vst[src]=true; sz[src]++;
 
-    forn1(dst, n)
+    forn1(dst,n)
     {
-        if(adj[src][dst]>0 && !vst[src])
-        {
+        if(adj[src][dst]>0 && !vst[dst]) dfs2(dst, vst), nc[src]++, sz[src]+=sz[dst], chd[src].push_back(dst);
+    }
+}
 
+void print(int src, int not_select, int ck)
+{
+    if(!not_select) ck--, selected.insert(src);
+    int mc=dp[src][not_select][nc[src]][ck];
+
+    rforn(i, nc[src])
+    {
+        int chn=chd[src][i];
+        forn(j, sz[chn]+1)
+        {
+            if(ck-j>=0 && ck-j<dp[src][not_select][i].size())
+            {
+                if(j!=0 && dp[src][not_select][i][ck-j]+dp[chn][0][nc[chn]][j-1]+(!not_select?adj[src][chn]:0)==mc)
+                {
+                    print(chn, 0,j), ck=ck-j, mc-=dp[chn][0][nc[chn]][j-1]+(!not_select?adj[src][chn]:0);
+                    break;
+                }
+
+                if(j!=sz[chn] && dp[src][not_select][i][ck-j]+dp[chn][1][nc[chn]][j]+(not_select?adj[src][chn]:0)==mc)
+                {
+                    print(chn, 1,j), ck=ck-j, mc-=dp[chn][1][nc[chn]][j]+(not_select?adj[src][chn]:0);
+                    break;
+                }
+            }
         }
     }
 }
@@ -93,32 +103,35 @@ int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
     cin>>n>>k; int a,b,c;
+
     forn(i,n-1) cin>>a>>b>>c, adj[a][b]=c, adj[b][a]=c;
 
-    V<bool> vst(1050, false);
-    dfs(1, vst);
+    assert(n!=1);
 
-    cout << min(dp[1][k-1][0], dp[1][k][1]) << endl;
+    V<bool> vst(1050, false); dfs2(1, vst);
+    fill(vst.begin(), vst.end(), false); dfs(1, vst);
 
+    cout << min(dp[1][0][nc[1]][k-1], dp[1][1][nc[1]][k]) << endl;
 
+    if(dp[1][0][nc[1]][k-1]>dp[1][1][nc[1]][k]) print(1, 1, k);
+    else print(1, 0, k);
+
+    while(selected.size()!=k)
+    {
+        forn1(i,n)
+        {
+            if(!binary_search(selected.begin(), selected.end(), i)) selected.insert(i);
+        }
+    }
+
+    for(auto it=selected.begin();it!=selected.end();it++)
+    {
+        cout<<*it<< ' ';
+    }
+    cout <<endl;
 
 	return 0;
 }
 
-/**
-6 2
-1 2 1
-1 4 1
-1 3 2
-3 5 1
-3 6 2
 
 
-7 2
-1 2 10
-1 3 15
-1 4 30
-5 3 20
-6 3 10
-4 7 25
-*/
