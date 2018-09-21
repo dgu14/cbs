@@ -1,8 +1,8 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-template <class T, class Q> class duo {public: T x; Q y; };
-template <class T, class Q, class U> class triple {public: T x; Q y; U z; };
+template <class T, class Q> class duo {public: T x; Q y; bool operator<(duo<T,Q> const& rhs){ return (x==rhs.x?y<rhs.y:x<rhs.x); }};
+template <class T, class Q, class U> class triple {public: T x; Q y; U z; bool operator<(triple<T,Q,U> const& rhs){ return (x==rhs.x?(y==rhs.y?z<rhs.z:y<rhs.y):x<rhs.x);}};
 template <class T> using V=vector<T>;
 
 using ll=long long;
@@ -26,9 +26,35 @@ using diii=triple<dbl,dbl,dbl>;
 #define for1(i,p,q)                 for(int i=(int)p;i<=q;i++)
 #define rfor1(i,p,q)                for(int i=(int)q;i>=p;i--)
 
+int n,k, w[200], v[200], dp[105][100005];
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
+    cin>>n>>k;
+
+    forn1(i,n)
+    {
+        cin>>w[i]>>v[i];
+    }
+
+    forn1(i,n)
+    {
+        forn1(j,100000)
+        {
+            if(j-w[i]==0 || (j-w[i]>0 && dp[i-1][j-w[i]]))
+                dp[i][j]=max({dp[i][j], dp[i-1][j-w[i]]+v[i]});
+            dp[i][j]=max(dp[i][j], dp[i-1][j]);
+        }
+    }
+
+    int mv=0;
+    forn1(i, k)
+    {
+        mv=max(mv, dp[n][i]);
+    }
+
+    cout << mv << endl;
 
 	return 0;
 }
+
