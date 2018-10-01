@@ -25,15 +25,22 @@ int main()
     forn1(i,n) cin>>x[i];
     forn1(i,n) s[i]=s[i-1]+x[i];
 
-    ll j=0;
+    ll j=0; ll po;
     forn1(i,n)
     {
         ll cv=dp[j]+a*(s[i]-s[j])*(s[i]-s[j])+b*(s[i]-s[j])+c;
-        while(i>j+1)
+
+        po=j;
+        while(i>po+1)
         {
-            ll nv=dp[j+1]+a*(s[i]-s[j+1])*(s[i]-s[j+1])+b*(s[i]-s[j+1])+c;
-            if(nv>=cv) j++, cv=nv;
-            else break;
+            ll nv=dp[po+1]+a*(s[i]-s[po+1])*(s[i]-s[po+1])+b*(s[i]-s[po+1])+c;
+            if(nv>=cv)
+            {
+                cv=nv;
+                j=po;
+            }
+
+            po++;
         }
 
         dp[i]=cv;
