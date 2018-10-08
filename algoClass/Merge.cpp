@@ -1,4 +1,4 @@
-// 2014004193_ÃÖ¹ü¼®_508
+// 2014004193_ìµœë²”ì„
 #include <iostream>
 using namespace std;
 typedef long long ll;

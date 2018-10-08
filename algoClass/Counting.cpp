@@ -1,4 +1,4 @@
-// 2014004193_ÃÖ¹ü¼®_508
+// 2014004193_ìµœë²”ì„
 #include <iostream>
 #include <cstdio>
 using namespace std;
@@ -14,6 +14,7 @@ int main()
     for(int i=0;i<k;i++) scanf("%d%d",&qry[i].first,&qry[i].second);
     for(int i=0;i<n;i++) scanf("%d",&t), a[t]++;
 
+    // c array.
     for(int i=1;i<=100000;i++) s[i]=s[i-1]+a[i];
 
     for(int i=0;i<k;i++)
