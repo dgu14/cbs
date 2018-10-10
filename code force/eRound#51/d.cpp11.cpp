@@ -23,18 +23,19 @@ int main()
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
     cin>>n>>k;
 
-    dp[0][0][0]=1;
-    dp[0][0][3]=1;
+    dp[1][1][0]=dp[1][1][3]=1;
+    dp[1][2][1]=dp[1][2][2]=1;
 
     forn(i,n)
     {
-        forn(j,k+1)
+        if(i==0) continue;
+        forn1(j,k)
         {
             forn(r,4)
             {
                 forn(q,4)
                 {
-                    dp[i+1][j+r^q][q]=(dp[i+1][j+r^q][q]+dp[i][j][r])%MOD;
+                    dp[i+1][j+(r^q)][q]=(dp[i+1][j+(r^q)][q]+dp[i][j][r])%MOD;
                 }
             }
         }
