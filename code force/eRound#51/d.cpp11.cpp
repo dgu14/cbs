@@ -35,7 +35,11 @@ int main()
             {
                 forn(q,4)
                 {
-                    dp[i+1][j+(r^q)][q]=(dp[i+1][j+(r^q)][q]+dp[i][j][r])%MOD;
+                    if(q==0 || q==3)
+                    {
+                        dp[i+1][j+(bitcount(r^q)==2?1:0)][q]=(dp[i+1][j+(bitcount(r^q)==2?1:0)][q]+dp[i][j][r])%MOD;
+                    }
+                    else dp[i+1][j+bitcount(r^q)][q]=(dp[i+1][j+bitcount(r^q)][q]+dp[i][j][r])%MOD;
                 }
             }
         }
