@@ -18,7 +18,6 @@ using ii=pair<int,int>;
 
 int n,m,r,c,x,y;
 string board[2005];
-int l[2005][2005], r[2005][2005];
 int dx[]={0,0,1,-1};
 int dy[]={1,-1,0,0};
 int main()
@@ -28,9 +27,9 @@ int main()
     forn(i,n) cin>>board[i];
     r--;c--;
 
-    priority_queue<int, V<int>, greater<int>> pq;
+    priority_queue<ii, V<ii>, greater<ii>> pq;
     pq.push({0, r*m+c});
-    V<int> dist1(2005*2005, INF);
+    V<int> dist1(2005*2005, 2*INF);
 
     while(pq.size())
     {
@@ -43,14 +42,17 @@ int main()
         {
             if(cx+dx[i]>=0 && cx+dx[i]<n && cy+dy[i]>=0 && cy+dy[i]<m && board[cx+dx[i]][cy+dy[i]]=='.')
             {
-                if(i==0 || i==1) pq.push({here.first+1, (cx+dx[i])*m+(cy+dy[i])}); // right
-                else pq.push({here.first, (cx+dx[i])*m+(cy+dy[i])});
+                if(i==0)
+                {
+                    if(dist1[(cx+dx[i])*m+(cy+dy[i])]>here.first+1) pq.push({here.first+1, (cx+dx[i])*m+(cy+dy[i])});
+                }
+                else if(dist1[(cx+dx[i])*m+(cy+dy[i])]>here.first) pq.push({here.first, (cx+dx[i])*m+(cy+dy[i])});
             }
         }
     }
 
     pq.push({0, r*m+c});
-    V<int> dist2(2005*2005, INF);
+    V<int> dist2(2005*2005, 2*INF);
 
     while(pq.size())
     {
@@ -63,13 +65,29 @@ int main()
         {
             if(cx+dx[i]>=0 && cx+dx[i]<n && cy+dy[i]>=0 && cy+dy[i]<m && board[cx+dx[i]][cy+dy[i]]=='.')
             {
-                if(i==1) pq.push({here.first+1, (cx+dx[i])*m+(cy+dy[i])}); // right
-                else pq.push({here.first, (cx+dx[i])*m+(cy+dy[i])});
+                if(i==1)
+                {
+                    if(dist2[(cx+dx[i])*m+(cy+dy[i])]>here.first+1) pq.push({here.first+1, (cx+dx[i])*m+(cy+dy[i])});
+                }
+                else if(dist2[(cx+dx[i])*m+(cy+dy[i])]>here.first) pq.push({here.first, (cx+dx[i])*m+(cy+dy[i])});
             }
         }
     }
 
+    int ret=0;
+    forn(i,n)
+    {
+        forn(j,m)
+        {
+            int d=j-c;
+            if((dist1[i*m+j]<=y && dist1[i*m+j]-d<=x) || dist2[i*m+j]<=x && dist2[i*m+j]+d<=y)
+            {
+                ret++;
+            }
+        }
+    }
 
+    cout << ret << endl;
 
 	return 0;
 }
