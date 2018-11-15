@@ -41,28 +41,28 @@ int main()
     }
 
     priority_queue<lii, V<lii>, greater<lii>> pq;
-    V<bool> vst(n, false);
     V<ll> dist(n, LONG_INF);
     pq.push({0L, 0});
+    dist[0]=0L;
 
     while(pq.size())
     {
         lii here=pq.top(); pq.pop();
         if(dist[here.second]<here.first) continue;
-        dist[here.second]=here.first;
-        vst[here.second]=true;
 
         for(int i=0;i<adj[here.second].size();i++)
         {
             ll there=adj[here.second][i].first;
             ll cost=adj[here.second][i].second;
 
-            if(!vst[there] && dist[there]>dist[here.second]+cost)
+            if(dist[there]>dist[here.second]+cost)
             {
+                dist[there]=dist[here.second]+cost;
                 pq.push({dist[here.second]+cost, there});
             }
         }
     }
+
 
     int s=0, d=0;
     fill(parent, parent+300005, -1);
