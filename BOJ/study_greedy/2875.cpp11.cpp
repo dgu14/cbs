@@ -16,10 +16,31 @@ using ii=pair<int,int>;
 #define for1(i,p,q)                 for(int i=(int)p;i<=q;i++)
 #define rfor1(i,p,q)                for(int i=(int)q;i>=p;i--)
 
+int n,m,k;
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
+    cin>>n>>m>>k;
 
+    int i,j;
+
+    i=n/2;
+    j=min(i,m);
+
+    n-=2*j;
+    m-=j;
+
+    k-=n+m;
+
+    if(k>0)
+    {
+        j-=(k+2)/3;
+    }
+
+    j=max(j,0);
+
+    cout << j << endl;
 
 	return 0;
 }
+

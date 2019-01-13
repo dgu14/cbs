@@ -16,10 +16,44 @@ using ii=pair<int,int>;
 #define for1(i,p,q)                 for(int i=(int)p;i<=q;i++)
 #define rfor1(i,p,q)                for(int i=(int)q;i>=p;i--)
 
+int n,c,m,p,q,r,st[3000],ret;
+V<pair<int, ii>> v;
+
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
+    cin>>n>>c>>m;
 
+    forn(i,m)
+    {
+        cin>>p>>q>>r;
+        v.push_back({q,{p,r}});
+    }
+
+    sort(v.begin(), v.end());
+
+    forn(i,m)
+    {
+        int srt=v[i].second.first;
+        int dest=v[i].first;
+        int cc=v[i].second.second;
+
+        int minc=cc;
+
+        for(int j=srt;j<dest;j++)
+        {
+            minc=min(minc, c-st[j]);
+        }
+
+        for(int j=srt;j<dest;j++)
+        {
+            st[j]+=minc;
+        }
+
+        ret+=minc;
+    }
+
+    cout << ret << endl;
 
 	return 0;
 }

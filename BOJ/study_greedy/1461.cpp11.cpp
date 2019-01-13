@@ -16,10 +16,47 @@ using ii=pair<int,int>;
 #define for1(i,p,q)                 for(int i=(int)p;i<=q;i++)
 #define rfor1(i,p,q)                for(int i=(int)q;i>=p;i--)
 
+int n,m, arr[20000], ret;
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
+    // right after left
+    cin>>n>>m;
+    forn(i,n) cin>>arr[i];
+
+    sort(arr, arr+n);
+    int pos=-1;
+    forn(i,n) if(arr[i]>=0)
+    {
+        pos=i;
+        break;
+    }
+
+    if(pos==-1) pos=n;
+    int g=(pos+m-1)/m;
+    int k=0;
+    forn(i,g)
+    {
+        ret+=-arr[k]*2;
+        k+=m;
+    }
+
+    k=n-1;
+    pos=n-pos;
+    g=(pos+m-1)/m;
+
+    forn(i,g)
+    {
+        ret+=arr[k]*2;
+        k-=m;
+    }
+
+    ret-=max(abs(arr[0]), abs(arr[n-1]));
+
+    cout << ret << endl;
+
 
 	return 0;
 }
+

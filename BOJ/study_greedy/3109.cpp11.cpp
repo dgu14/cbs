@@ -16,10 +16,56 @@ using ii=pair<int,int>;
 #define for1(i,p,q)                 for(int i=(int)p;i<=q;i++)
 #define rfor1(i,p,q)                for(int i=(int)q;i>=p;i--)
 
+int r,c, ret, dp[10005][505];
+string m[20000];
+
+int dfs(int a, int b)
+{
+    if(b==c-1) return 1;
+
+    if(a>0 && m[a-1][b+1]=='.' && dp[a-1][b+1]==0)
+    {
+        dp[a-1][b+1]=1;
+        if(dfs(a-1, b+1)) return 1;
+    }
+
+    if(m[a][b+1]=='.' && dp[a][b+1]==0)
+    {
+        dp[a][b+1]=1;
+        if(dfs(a, b+1)) return 1;
+    }
+
+    if(a+1<r && m[a+1][b+1]=='.' && dp[a+1][b+1]==0)
+    {
+        dp[a+1][b+1]=1;
+        if(dfs(a+1, b+1)) return 1;
+    }
+
+    return 0;
+}
+
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
+    cin>>r>>c;
+    forn(i,r) cin>>m[i];
 
+    forn(i,r)
+    {
+        ret+=dfs(i,0);
+    }
+
+    cout << ret << endl;
 
 	return 0;
 }
+/*
+6 5
+.x.x.
+...x.
+..x..
+.x...
+.xxxx
+.xxxx
+
+*/

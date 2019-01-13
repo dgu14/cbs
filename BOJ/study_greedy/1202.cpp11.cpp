@@ -16,10 +16,47 @@ using ii=pair<int,int>;
 #define for1(i,p,q)                 for(int i=(int)p;i<=q;i++)
 #define rfor1(i,p,q)                for(int i=(int)q;i>=p;i--)
 
+int n,k,w[500000];
+ii mv[500000];
+
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
+    cin>>n>>k;
 
+    forn(i,n)
+    {
+        cin>>mv[i].first>>mv[i].second;
+    }
+
+    forn(i,k)
+    {
+        cin>>w[i];
+    }
+
+    sort(w, w+k);
+    sort(mv, mv+n);
+    priority_queue<int, V<int>, less<int>> pq;
+
+    int sz=0;
+    ll ret=0;
+    forn(i,k)
+    {
+        while(sz<n && w[i]>=mv[sz].first)
+        {
+            pq.push(mv[sz].second);
+            sz++;
+        }
+
+        if(pq.size())
+        {
+            ret+=pq.top();
+            pq.pop();
+        }
+    }
+
+    cout << ret << endl;
 
 	return 0;
 }
+

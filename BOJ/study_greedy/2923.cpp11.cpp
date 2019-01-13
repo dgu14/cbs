@@ -16,10 +16,44 @@ using ii=pair<int,int>;
 #define for1(i,p,q)                 for(int i=(int)p;i<=q;i++)
 #define rfor1(i,p,q)                for(int i=(int)q;i>=p;i--)
 
+int n;
+int a[101], b[101];
+int aa[101], bb[101];
+
+int maximal(int sz)
+{
+    int mx=-1;
+    int ap=0, bp=100;
+    memcpy(aa, a, sizeof(a));
+    memcpy(bb, b, sizeof(b));
+
+    while(true)
+    {
+        while(ap<=100 && aa[ap]==0) ap++;
+        while(bp>=0 && bb[bp]==0) bp--;
+
+        if(ap==101 || bp==-1) break;
+        int tmp=min(aa[ap], bb[bp]);
+        aa[ap]-=tmp;
+        bb[bp]-=tmp;
+
+        mx=max(mx, ap+bp);
+    }
+
+    return mx;
+}
+
 int main()
 {
-    ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-
+    scanf("%d", &n);
+    int t,q,sz=0;
+    forn(i,n)
+    {
+        scanf("%d%d", &t, &q);
+        a[t]++;
+        b[q]++;
+        printf("%d\n", maximal(++sz));
+    }
 
 	return 0;
 }
