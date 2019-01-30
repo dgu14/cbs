@@ -19,8 +19,11 @@ using ii=pair<int,int>;
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
+    // dp: 길이 a를 b를써서 2개를 만들수 있나.
+    // dp2-> 길이 a를 b를써서 만들 수 있나
+    // dp는 dp2를 가지고 b를 쪼개서 확인하는 방식으로
+    // 그러면 dp를 만드는데 160*2^16 dp2를 160에대해서 반씩 나눠서하면되니까.
 
 
-    cout << 0x43 << endl;
 	return 0;
 }

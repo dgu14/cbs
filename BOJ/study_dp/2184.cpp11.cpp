@@ -19,7 +19,7 @@ using ii=pair<int,int>;
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-
+    // dp는 쉽죠? 이미해봤져?
 
     cout << 0x43 << endl;
 	return 0;

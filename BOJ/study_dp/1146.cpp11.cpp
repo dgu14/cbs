@@ -20,7 +20,8 @@ int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
+    // dp는 상대적인 크기로 이용
+    // dp[i]-> dp[1] *dp[i-2] , dp[3] * dp[i-4] 다 더하기 답은 2*dp[i]
 
-    cout << 0x43 << endl;
 	return 0;
 }

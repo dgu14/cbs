@@ -16,11 +16,36 @@ using ii=pair<int,int>;
 #define for1(i,p,q)                 for(int i=(int)p;i<=q;i++)
 #define rfor1(i,p,q)                for(int i=(int)q;i>=p;i--)
 
+int n,m,a[100005],psum[100005], dp[100005];
+
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
+    cin>>n>>m;
+    forn1(i,n)
+    {
+        cin>>a[i];
+        psum[i]=psum[i-1]+a[i];
+    }
 
+    dp[m]=psum[m];
 
-    cout << 0x43 << endl;
+    for(int i=m+1;i<=n;i++)
+    {
+        if(dp[i-1]+a[i]>=psum[i]-psum[i-m])
+        {
+            dp[i]=dp[i-1]+a[i];
+        }
+        else dp[i]=psum[i]-psum[i-m];
+    }
+
+    int m_t=0;
+
+    for(int i=m;i<=n;i++)
+    {
+        m_t=max(m_t, dp[i]);
+    }
+
+    cout << m_t << endl;
 	return 0;
 }

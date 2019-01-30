@@ -20,7 +20,8 @@ int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
 
+    // dp는 꽉채웠을 때 경우, 피보나치
+    // dp2는 하나가 비웟을때
 
-    cout << 0x43 << endl;
 	return 0;
 }
