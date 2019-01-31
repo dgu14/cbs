@@ -16,14 +16,56 @@ using ii=pair<int,int>;
 #define for1(i,p,q)                 for(int i=(int)p;i<=q;i++)
 #define rfor1(i,p,q)                for(int i=(int)q;i>=p;i--)
 
+int n, arr[20];
+bool dp[17][41][41][81][81];
+
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-    // dp: 길이 a를 b를써서 2개를 만들수 있나.
-    // dp2-> 길이 a를 b를써서 만들 수 있나
-    // dp는 dp2를 가지고 b를 쪼개서 확인하는 방식으로
-    // 그러면 dp를 만드는데 160*2^16 dp2를 160에대해서 반씩 나눠서하면되니까.
 
+    cin>>n;
+    forn1(i,n) cin>>arr[i];
+
+    dp[0][0][0][0][0]=1;
+    forn1(i,n)
+    {
+        forn(j,41)
+        {
+            forn(k,41)
+            {
+                forn(r,81)
+                {
+                    forn(q,81)
+                    {
+                        if(j+arr[i]<=40) dp[i][j+arr[i]][k][r][q]|=dp[i-1][j][k][r][q];
+                        if(k+arr[i]<=40) dp[i][j][k+arr[i]][r][q]|=dp[i-1][j][k][r][q];
+                        if(r+arr[i]<=80) dp[i][j][k][r+arr[i]][q]|=dp[i-1][j][k][r][q];
+                        if(q+arr[i]<=80) dp[i][j][k][r][q+arr[i]]|=dp[i-1][j][k][r][q];
+                        dp[i][j][k][r][q]|=dp[i-1][j][k][r][q];
+                    }
+                }
+            }
+        }
+    }
+
+    int ret=-INF;
+
+    forn1(i,40)
+    {
+        forn1(j,40)
+        {
+            if(dp[n][i][i][j][j])
+            {
+                ret=max(ret, i*j);
+            }
+        }
+    }
+
+    if(ret==-INF)
+    {
+        cout << -1 << endl;
+    }
+    else cout << ret << endl;
 
 	return 0;
 }

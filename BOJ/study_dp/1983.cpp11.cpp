@@ -16,59 +16,39 @@ using ii=pair<int,int>;
 #define for1(i,p,q)                 for(int i=(int)p;i<=q;i++)
 #define rfor1(i,p,q)                for(int i=(int)q;i>=p;i--)
 
-ll n,k;
-ll dp[55], dp2[55][55];
+int n, a[450],b[450], asz, bsz, ff;
+int dp[450][450][450];
 int main()
 {
     ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
-
-    dp[0]=1;
-    dp[1]=1; dp[2]=2;
-    forn1(i,50)
+    // dp[i][j][k] i번째까지 봤을때 위에가 j번째, 아래가 k번ㅁ째까지 했을때 최대값
+    // dp[i][j][k]는 i-1,j,k일수도 있고 j-1, k 또는 j-1 k-1 j, k-1일수도 있다.
+    // 최대가 맞냐? i,j,k상태에서 최대는 위의 4개 중에서 존재할 수 밖에 없다.
+    cin>>n;
+    forn1(i,n)
     {
-        if(i==1 || i==2) continue;
-        dp[i]=dp[i-1]+dp[i-2];
+        cin>>ff; if(ff!=0) a[++asz]=ff;
     }
 
-    forn1(i,50)
+    forn1(i,n)
     {
-        forn1(j,i)
+        cin>>ff; if(ff!=0) b[++bsz]=ff;
+    }
+
+    forn(i,450) forn(j,450) forn(k,450) dp[i][j][k]=-INF;
+    dp[0][0][0]=0;
+
+    forn1(i,n)
+    {
+        forn(j,asz+1)
         {
-            ll a=0,b=0;
-
-            forn(r,j)
+            forn(k,bsz+1)
             {
-                a+=dp[r];
+                dp[i][j][k]=max({dp[i-1][j][k],(j!=0?dp[i-1][j-1][k]:-INF), (k!=0?dp[i-1][j][k-1]:-INF), (j!=0&&k!=0?dp[i-1][j-1][k-1]:-INF)+a[j]*b[k]});
             }
-
-            for(int r=j;r<=i;r++)
-            {
-                b+=dp[i-r];
-            }
-
-            dp2[i][j]=a*dp[i-j] + b*dp[j-1] - dp[i-j]*dp[j-1];
         }
     }
 
-    cin>>n>>k;
-
-    ll ret=0;
-    // 고정석에 아무도 안 앉는다.
-    ret+=dp[k-1]*dp[n-k];
-
-    // 고정석에 i가 앉는다
-    forn1(i,k-1)
-    {
-        ret+=dp[n-k]*dp2[k-1][i];
-    }
-
-    forn1(i,n-k)
-    {
-        ret+=dp[k-1]*dp2[n-k][i];
-    }
-
-    cout << ret << endl;
-
-
+    cout << dp[n][asz][bsz] << endl;
 	return 0;
 }
